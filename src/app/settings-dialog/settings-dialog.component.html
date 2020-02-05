@@ -1,18 +1,15 @@
-<form #settingsForm="ngForm">
-  <div>
-    <label for="username">Username</label>
-    <input type="text" name="username" required [(ngModel)]="data.username" />
-  </div>
-  <div>
-    <label for="password">Password</label>
-    <input type="password" name="password" required [(ngModel)]="data.password" />
-  </div>
-  <div>
-    <label for="password">Base URI</label>
-    <input type="text" name="baseUri" required [(ngModel)]="data.baseUri" />
-  </div>
+<form #settingsForm="ngForm" class="settings-form-container">
+  <mat-form-field>
+    <input matInput type="text" name="username" placeholder="Username" required [(ngModel)]="data.username" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="password" name="password" placeholder="Password" required [(ngModel)]="data.password" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" name="baseUri" placeholder="Base URI" required [(ngModel)]="data.baseUri" />
+  </mat-form-field>
   <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="data">Ok</button>
+    <button mat-button [mat-dialog-close]="data" [disabled]="settingsForm.invalid">Ok</button>
     <button mat-button [mat-dialog-close]>Cancel</button>
   </div>
 </form>

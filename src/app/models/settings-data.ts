@@ -4,4 +4,7 @@ interface SettingsData {
   baseUri: string;
   accessToken: string;
   refreshToken: string;
+  clientId: string;
+  deviceId: string;
+  assetName: string;
 }

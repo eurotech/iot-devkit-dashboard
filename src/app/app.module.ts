@@ -18,12 +18,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { PlcComponent } from './plc/plc.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    SettingsDialogComponent
+    SettingsDialogComponent,
+    PlcComponent
   ],
   imports: [
     BrowserModule,

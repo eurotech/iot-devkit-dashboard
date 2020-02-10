@@ -8,6 +8,12 @@
   <mat-form-field>
     <input matInput type="text" name="baseUri" placeholder="Base URI" required [(ngModel)]="data.baseUri" />
   </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" name="clientId" placeholder="Client ID" required [(ngModel)]="data.clientId" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="text" name="assetName" placeholder="Asset Name" required [(ngModel)]="data.assetName" />
+  </mat-form-field>
   <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="data" [disabled]="settingsForm.invalid">Ok</button>
     <button mat-button [mat-dialog-close]>Cancel</button>

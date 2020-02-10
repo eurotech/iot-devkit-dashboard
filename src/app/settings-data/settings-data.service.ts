@@ -16,6 +16,9 @@ export class SettingsDataService implements SettingsData {
 
   public accessToken: string;
   public refreshToken: string;
+  public clientId: string;
+  public deviceId: string;
+  public assetName: string;
 
   constructor() { }
 }

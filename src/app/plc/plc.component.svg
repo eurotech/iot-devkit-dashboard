@@ -14,8 +14,8 @@
   <rect id="LED4-GREEN" (click)="clickLed($event)" height="8.5" width="24" rx="3" ry="3" x="395" y="180.5" stroke="green" fill="rgba(0,255,0,0.35)" />
   <rect id="LED4-BLUE" (click)="clickLed($event)" height="8.5" width="20" rx="3" ry="3" x="395" y="190.5" stroke="blue" fill="rgba(0,0,255,0.35)" />
   <text [innerHtml]="plcStatus.status['Counter-3']" x="250" y="265.5" dominant-baseline="middle" text-anchor="middle" fill="white" />
-  <use xlink:href="#button" id="toggle4" fill="rgba(210,140,21,0.35)" x="295" y="246" />
-  <use xlink:href="#button" id="toggle5" fill="rgba(174,23,205,0.35)" x="358" y="246" />
-  <use xlink:href="#button" id="toggle6" fill="rgba(40,227,192,0.35)" x="421.5" y="246" />
+  <use xlink:href="#button" id="toggle4" [ngClass]="{'plc-toggle': true, 'on': plcStatus.status['Toggle-4'], 'off': !plcStatus.status['Toggle-4']}" x="295" y="246" />
+  <use xlink:href="#button" id="toggle5" [ngClass]="{'plc-toggle': true, 'on': plcStatus.status['Toggle-5'], 'off': !plcStatus.status['Toggle-5']}" x="358" y="246" />
+  <use xlink:href="#button" id="toggle6" [ngClass]="{'plc-toggle': true, 'on': plcStatus.status['Toggle-6'], 'off': !plcStatus.status['Toggle-6']}" x="421.5" y="246" />
   <text [innerHtml]="plcStatus.status['Quad-Counter']" dominant-baseline="middle" text-anchor="middle" x="504" y="268" fill="white" />
 </svg>

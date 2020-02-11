@@ -1,0 +1,8 @@
+.plc-toggle {
+  &.on {
+    fill: rgba(46,210,21,0.35);
+  }
+  &.off {
+    fill: rgba(210, 21, 21, 0.35)
+  }
+}

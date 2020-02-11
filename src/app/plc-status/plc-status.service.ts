@@ -11,7 +11,12 @@ export class PlcStatusService {
     LED3: false,
     'LED4-BLUE': false,
     'LED4-GREEN': false,
-    'LED4-RED': false
+    'LED4-RED': false,
+    'Toggle-4': false,
+    'Toggle-5': false,
+    'Toggle-6': false,
+    'Quad-Counter': '',
+    'Counter-3': ''
   };
 
   constructor() { }

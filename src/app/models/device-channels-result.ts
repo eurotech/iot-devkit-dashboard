@@ -9,7 +9,7 @@ interface DeviceAsset {
 
 interface DeviceChannel {
   valueType: string;
-  value: any;
+  value: string;
   name: string;
   timestamp: string;
 }

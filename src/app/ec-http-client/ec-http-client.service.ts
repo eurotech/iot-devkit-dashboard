@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SettingsDataService } from '../settings-data/settings-data.service';
-import { Observable } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 import { DeviceListResult } from '../models/device-list-result';
+import { DeviceChannelsResult } from '../models/device-channels-result';
+import { startWith, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +40,8 @@ export class EcHttpClientService {
       });
   }
 
-  public readAllChannels() {
-    return this.http.post(`${this.settingsData.baseUri}/_/devices/${this.settingsData.deviceId}/assets/_read`,
+  public readAllChannels(): Observable<DeviceChannelsResult> {
+    return this.http.post<DeviceChannelsResult>(`${this.settingsData.baseUri}/_/devices/${this.settingsData.deviceId}/assets/_read`,
       {
         type: 'deviceAssets',
         deviceAsset: [
@@ -76,5 +78,13 @@ export class EcHttpClientService {
           Authorization: `Bearer ${this.settingsData.accessToken}`
         }
       });
+  }
+
+  public startPolling(): Observable<any> {
+    return interval(5000)
+    .pipe(
+      startWith(0),
+      switchMap(() => this.readAllChannels())
+    );
   }
 }

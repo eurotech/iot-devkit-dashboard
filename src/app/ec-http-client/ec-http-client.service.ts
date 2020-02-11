@@ -81,9 +81,8 @@ export class EcHttpClientService {
   }
 
   public startPolling(): Observable<any> {
-    return interval(5000)
+    return interval(this.settingsData.refreshInterval * 1000)
     .pipe(
-      startWith(0),
       switchMap(() => this.readAllChannels())
     );
   }

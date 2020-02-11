@@ -19,6 +19,7 @@ export class SettingsDataService implements SettingsData {
   public clientId: string;
   public deviceId: string;
   public assetName: string;
+  public refreshInterval = 5;
 
   constructor() { }
 }

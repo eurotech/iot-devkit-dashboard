@@ -14,6 +14,9 @@
   <mat-form-field>
     <input matInput type="text" name="assetName" placeholder="Asset Name" required [(ngModel)]="data.assetName" />
   </mat-form-field>
+  <mat-form-field>
+    <input matInput type="number" name="refreshInterval" placeholder="Refresh Interval (seconds)" required [(ngModel)]="data.refreshInterval" min="1" max="20" />
+  </mat-form-field>
   <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="data" [disabled]="settingsForm.invalid">Ok</button>
     <button mat-button [mat-dialog-close]>Cancel</button>

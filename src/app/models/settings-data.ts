@@ -7,4 +7,5 @@ interface SettingsData {
   clientId: string;
   deviceId: string;
   assetName: string;
+  refreshInterval: number;
 }

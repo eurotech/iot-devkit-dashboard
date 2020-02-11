@@ -89,7 +89,8 @@ export class ToolbarComponent implements OnInit {
         password: this.settingsData.password,
         baseUri: this.settingsData.baseUri,
         clientId: this.settingsData.clientId,
-        assetName: this.settingsData.assetName
+        assetName: this.settingsData.assetName,
+        refreshInterval: this.settingsData.refreshInterval
       },
       disableClose: true
     });
@@ -101,6 +102,7 @@ export class ToolbarComponent implements OnInit {
         this.settingsData.baseUri = result.baseUri;
         this.settingsData.clientId = result.clientId;
         this.settingsData.assetName = result.assetName;
+        this.settingsData.refreshInterval = result.refreshInterval;
       }
     });
   }

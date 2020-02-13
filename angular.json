@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/devkit-dashboard-ng",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -55,6 +56,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -138,5 +143,8 @@
       }
     }
   },
-  "defaultProject": "devkit-dashboard-ng"
+  "defaultProject": "devkit-dashboard-ng",
+  "cli": {
+    "analytics": "b263bd1b-db61-4f98-82f6-93f67303da62"
+  }
 }

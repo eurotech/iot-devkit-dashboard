@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SettingsData } from '../models/settings-data';
 
 @Component({
   selector: 'app-settings-dialog',

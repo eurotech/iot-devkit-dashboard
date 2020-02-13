@@ -4,7 +4,8 @@ import { SettingsDataService } from '../settings-data/settings-data.service';
 import { Observable, interval } from 'rxjs';
 import { DeviceListResult } from '../models/device-list-result';
 import { DeviceChannelsResult } from '../models/device-channels-result';
-import { startWith, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
+import { AccessToken } from '../models/access-token';
 
 @Injectable({
   providedIn: 'root'

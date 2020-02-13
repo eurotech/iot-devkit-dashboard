@@ -9,11 +9,7 @@ import { PlcStatusService } from '../plc-status/plc-status.service';
 })
 export class PlcComponent implements OnInit {
 
-  public test = 'pippo';
-
-  constructor(private ecHttp: EcHttpClientService, private plcStatus: PlcStatusService) { }
-
-  private value: boolean;
+  constructor(private ecHttp: EcHttpClientService, public plcStatus: PlcStatusService) { }
 
   ngOnInit() {
   }

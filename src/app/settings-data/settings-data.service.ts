@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SettingsData } from '../models/settings-data';
 
 @Injectable({
   providedIn: 'root'

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EcHttpClientService } from './ec-http-client/ec-http-client.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'devkit-dashboard-ng';
+
+  constructor(private ecHttp: EcHttpClientService) { }
+
+  reset(event: MouseEvent) {
+    const id = (event.currentTarget as Element).id;
+    this.ecHttp.writeChannel(id, true).subscribe();
+  }
 }

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SettingsDataService } from '../settings-data/settings-data.service';
-import { Observable, interval } from 'rxjs';
+import { Observable, interval, EMPTY, of, throwError } from 'rxjs';
 import { DeviceListResult } from '../models/device-list-result';
 import { DeviceChannelsResult } from '../models/device-channels-result';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, catchError, retryWhen, tap } from 'rxjs/operators';
 import { AccessToken } from '../models/access-token';
 
 @Injectable({
@@ -83,8 +83,8 @@ export class EcHttpClientService {
 
   public startPolling(): Observable<any> {
     return interval(this.settingsData.refreshInterval * 1000)
-    .pipe(
-      switchMap(() => this.readAllChannels())
-    );
+      .pipe(
+        switchMap(() => this.readAllChannels())
+      );
   }
 }

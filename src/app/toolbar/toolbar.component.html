@@ -2,5 +2,5 @@
   <button mat-icon-button (click)="openSettings()">
     <mat-icon>settings</mat-icon>
   </button>
-  <mat-slide-toggle (change)="handleConnect($event)"></mat-slide-toggle>
+  <mat-slide-toggle #connect (change)="handleConnect($event)"></mat-slide-toggle>
 </mat-toolbar>

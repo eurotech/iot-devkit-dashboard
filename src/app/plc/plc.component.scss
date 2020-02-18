@@ -6,3 +6,12 @@
     fill: rgba(210, 21, 21, 0.35)
   }
 }
+
+.plc-led {
+  fill: rgb(255, 225, 0);
+  fill-opacity: 0%;
+
+  &.on {
+    fill-opacity: 100%;
+  }
+}

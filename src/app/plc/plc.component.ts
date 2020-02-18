@@ -15,7 +15,7 @@ export class PlcComponent implements OnInit {
   }
 
   clickLed(event: MouseEvent) {
-    const id = (event.target as Element).id;
+    const id = (event.currentTarget as Element).id;
     this.plcStatus.status[id] = !this.plcStatus.status[id];
     this.ecHttp.writeChannel(id, this.plcStatus.status[id]).subscribe();
   }

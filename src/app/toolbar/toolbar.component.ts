@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
 import { SettingsDataService } from '../settings-data/settings-data.service';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSlideToggleChange, MatSlideToggle } from '@angular/material/slide-toggle';
 
 import { EcHttpClientService } from '../ec-http-client/ec-http-client.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { PlcStatusService } from '../plc-status/plc-status.service';
 
-import { switchMap, map } from 'rxjs/operators';
-import { EMPTY, of, Observable, Subscription } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+import { EMPTY, Subscription, PartialObserver } from 'rxjs';
+import { DeviceChannelsResult } from '../models/device-channels-result';
 
 @Component({
   selector: 'app-toolbar',
@@ -20,7 +21,29 @@ import { EMPTY, of, Observable, Subscription } from 'rxjs';
 })
 export class ToolbarComponent implements OnInit {
 
+  @ViewChild('connect')
+  connect: MatSlideToggle;
+
   pollingConnection: Subscription;
+  plcObserver: PartialObserver<DeviceChannelsResult> = {
+    next: (channelsResult) => {
+      this.updatePlc(channelsResult);
+    },
+    error: (error) => {
+      if (error.status === 401) {
+        this.http.doAuth().subscribe({
+          next: (loginResult) => {
+            this.settingsData.accessToken = loginResult.tokenId;
+            this.settingsData.refreshToken = loginResult.refreshToken;
+            this.pollingConnection = this.http.startPolling().subscribe(this.plcObserver);
+          },
+          error: (loginError) => this.handleDisconnect(loginError)
+        });
+      } else {
+        this.handleDisconnect(error);
+      }
+    }
+  };
 
   constructor(
     private dialog: MatDialog,
@@ -61,19 +84,9 @@ export class ToolbarComponent implements OnInit {
               this.snackBar.open('Connected!', null, {
                 duration: 3000
               });
-              this.pollingConnection = this.http.startPolling().subscribe({
-                next: (channelsResult) => {
-                  this.updatePlc(channelsResult);
-                }
-              });
+              this.pollingConnection = this.http.startPolling().subscribe(this.plcObserver);
             },
-            error: (err) => {
-              this.snackBar.open(err.message, null, {
-                duration: 3000
-              });
-              event.source.checked = false;
-              event.source.disabled = false;
-            }
+            error: (error) => this.handleDisconnect(error)
           }
         );
     } else {
@@ -108,20 +121,29 @@ export class ToolbarComponent implements OnInit {
   }
 
   private updatePlc(channelsResult) {
-      for (const channel of channelsResult.deviceAsset[0].channels) {
-        let value: string | number | boolean;
-        switch (channel.valueType) {
-          case 'boolean':
-            value = channel.value === 'true';
-            break;
-          case 'integer':
-            value = parseInt(channel.value, 10);
-            break;
-          default:
-            value = channel.value;
-        }
-        this.plcStatus.status[channel.name] = value;
+    for (const channel of channelsResult.deviceAsset[0].channels) {
+      let value: string | number | boolean;
+      switch (channel.valueType) {
+        case 'boolean':
+          value = channel.value === 'true';
+          break;
+        case 'integer':
+          value = parseInt(channel.value, 10);
+          break;
+        default:
+          value = channel.value;
       }
-      return EMPTY;
+      this.plcStatus.status[channel.name] = value;
+    }
+    return EMPTY;
   }
+
+  private handleDisconnect(error) {
+    this.snackBar.open(error.message, null, {
+      duration: 3000
+    });
+    this.connect.checked = false;
+    this.connect.disabled = false;
+  }
+
 }

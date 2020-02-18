@@ -1,5 +1,11 @@
 <app-toolbar></app-toolbar>
-<app-plc></app-plc>
-<button mat-button id="Reset-Counter-3" (click)="reset($event)">Reset Counter</button>
-<button mat-button id="Reset-Quad-Counter" (click)="reset($event)">Reset Quad Counter</button>
+<div class="app-container">
+  <app-plc></app-plc>
+  <div class="button-container">
+      <button class="app-button" color="primary" mat-flat-button id="Reset-Counter-3" (click)="reset($event)">Reset
+        Counter</button>
+      <button class="app-button" color="primary" mat-flat-button id="Reset-Quad-Counter" (click)="reset($event)">Reset
+        Quad Counter</button>
+  </div>
+</div>
 <router-outlet></router-outlet>

@@ -1,6 +1,8 @@
-<mat-toolbar>
-  <button mat-icon-button (click)="openSettings()">
-    <mat-icon>settings</mat-icon>
+<mat-toolbar color="primary">
+  <button *ngIf="!this.pollingConnection || this.pollingConnection.closed" mat-raised-button #connect (click)="openSettings()">
+    Connect
   </button>
-  <mat-slide-toggle #connect (change)="handleConnect($event)"></mat-slide-toggle>
+  <button *ngIf="this.pollingConnection?.closed == false" mat-raised-button #disconnect (click)="handleDisconnect('Disconnected!')">
+    Disconnect
+  </button>
 </mat-toolbar>

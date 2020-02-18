@@ -13,6 +13,7 @@ import { PlcStatusService } from '../plc-status/plc-status.service';
 import { switchMap, tap } from 'rxjs/operators';
 import { EMPTY, Subscription, PartialObserver } from 'rxjs';
 import { DeviceChannelsResult } from '../models/device-channels-result';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-toolbar',
@@ -22,9 +23,13 @@ import { DeviceChannelsResult } from '../models/device-channels-result';
 export class ToolbarComponent implements OnInit {
 
   @ViewChild('connect')
-  connect: MatSlideToggle;
+  connect: MatButton;
 
-  pollingConnection: Subscription;
+  @ViewChild('disconnect')
+  disconnect: MatButton;
+
+  public pollingConnection: Subscription;
+
   plcObserver: PartialObserver<DeviceChannelsResult> = {
     next: (channelsResult) => {
       this.updatePlc(channelsResult);
@@ -37,10 +42,10 @@ export class ToolbarComponent implements OnInit {
             this.settingsData.refreshToken = loginResult.refreshToken;
             this.pollingConnection = this.http.startPolling().subscribe(this.plcObserver);
           },
-          error: (loginError) => this.handleDisconnect(loginError)
+          error: (loginError) => this.handleDisconnect(loginError.message)
         });
       } else {
-        this.handleDisconnect(error);
+        this.handleDisconnect(error.message);
       }
     }
   };
@@ -56,44 +61,39 @@ export class ToolbarComponent implements OnInit {
   ngOnInit() {
   }
 
-  public handleConnect(event: MatSlideToggleChange): void {
-    if (event.checked) {
-      // Connect
-      event.source.disabled = true;
-      this.http.doAuth()
-        .pipe(
-          switchMap((authResult) => {
-            this.settingsData.accessToken = authResult.tokenId;
-            this.settingsData.refreshToken = authResult.refreshToken;
-            return this.http.findDevice(this.settingsData.clientId);
-          }),
-          switchMap((deviceResult) => {
-            this.settingsData.deviceId = deviceResult.items[0].id;
-            return EMPTY;
-          }),
-          switchMap(() => {
-            return this.http.readAllChannels();
-          }),
-          switchMap((channelsResult) => this.updatePlc(channelsResult))
-        )
-        .subscribe(
-          {
-            complete: () => {
-              event.source.checked = true;
-              event.source.disabled = false;
-              this.snackBar.open('Connected!', null, {
-                duration: 3000
-              });
-              this.pollingConnection = this.http.startPolling().subscribe(this.plcObserver);
-            },
-            error: (error) => this.handleDisconnect(error)
-          }
-        );
-    } else {
-      // Disconnect
-      this.pollingConnection.unsubscribe();
-    }
+  public handleConnect(): void {
+    // Connect
+    this.connect.disabled = true;
+    this.http.doAuth()
+      .pipe(
+        switchMap((authResult) => {
+          this.settingsData.accessToken = authResult.tokenId;
+          this.settingsData.refreshToken = authResult.refreshToken;
+          return this.http.findDevice(this.settingsData.clientId);
+        }),
+        switchMap((deviceResult) => {
+          this.settingsData.deviceId = deviceResult.items[0].id;
+          return EMPTY;
+        }),
+        switchMap(() => {
+          return this.http.readAllChannels();
+        }),
+        switchMap((channelsResult) => this.updatePlc(channelsResult))
+      )
+      .subscribe(
+        {
+          complete: () => {
+            this.connect.disabled = false;
+            this.snackBar.open('Connected!', null, {
+              duration: 3000
+            });
+            this.pollingConnection = this.http.startPolling().subscribe(this.plcObserver);
+          },
+          error: (error) => this.handleDisconnect(error.message)
+        }
+      );
   }
+
 
   public openSettings(): void {
     const dialogRef = this.dialog.open(SettingsDialogComponent, {
@@ -116,6 +116,7 @@ export class ToolbarComponent implements OnInit {
         this.settingsData.clientId = result.clientId;
         this.settingsData.assetName = result.assetName;
         this.settingsData.refreshInterval = result.refreshInterval;
+        this.handleConnect();
       }
     });
   }
@@ -138,12 +139,16 @@ export class ToolbarComponent implements OnInit {
     return EMPTY;
   }
 
-  private handleDisconnect(error) {
-    this.snackBar.open(error.message, null, {
-      duration: 3000
-    });
-    this.connect.checked = false;
-    this.connect.disabled = false;
+  public handleDisconnect(message) {
+    this.pollingConnection?.unsubscribe();
+    if (message) {
+      this.snackBar.open(message, null, {
+        duration: 3000
+      });
+    }
+    if (this.connect) {
+      this.connect.disabled = false;
+    }
   }
 
 }

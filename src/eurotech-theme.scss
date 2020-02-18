@@ -1,0 +1,10 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$eurotech-app-primary: mat-palette($mat-blue);
+$eurotech-app-accent:  mat-palette($mat-pink, A200, A100, A400);
+$eurotech-app-warn:    mat-palette($mat-red);
+$eurotech-app-theme:   mat-light-theme($eurotech-app-primary, $eurotech-app-accent, $eurotech-app-warn);
+
+@include angular-material-theme($eurotech-app-theme);

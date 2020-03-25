@@ -3,7 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
 import { SettingsDataService } from '../settings-data/settings-data.service';
-import { MatSlideToggleChange, MatSlideToggle } from '@angular/material/slide-toggle';
 
 import { EcHttpClientService } from '../ec-http-client/ec-http-client.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,8 +11,8 @@ import { PlcStatusService } from '../plc-status/plc-status.service';
 
 import { switchMap, tap } from 'rxjs/operators';
 import { EMPTY, Subscription, PartialObserver } from 'rxjs';
-import { DeviceChannelsResult } from '../models/device-channels-result';
 import { MatButton } from '@angular/material/button';
+import {DeviceDataResult} from '../models/device-data-result';
 
 @Component({
   selector: 'app-toolbar',
@@ -30,7 +29,7 @@ export class ToolbarComponent implements OnInit {
 
   public pollingConnection: Subscription;
 
-  plcObserver: PartialObserver<DeviceChannelsResult> = {
+  plcObserver: PartialObserver<DeviceDataResult> = {
     next: (channelsResult) => {
       this.updatePlc(channelsResult);
     },
@@ -76,9 +75,9 @@ export class ToolbarComponent implements OnInit {
           return EMPTY;
         }),
         switchMap(() => {
-          return this.http.readAllChannels();
+          return this.http.readAllData();
         }),
-        switchMap((channelsResult) => this.updatePlc(channelsResult))
+        switchMap((dataResult) => this.updatePlc(dataResult))
       )
       .subscribe(
         {
@@ -121,20 +120,20 @@ export class ToolbarComponent implements OnInit {
     });
   }
 
-  private updatePlc(channelsResult) {
-    for (const channel of channelsResult.deviceAsset[0].channels) {
+  private updatePlc(dataResult: DeviceDataResult) {
+    for (const metric of dataResult.items[0].payload.metrics) {
       let value: string | number | boolean;
-      switch (channel.valueType) {
+      switch (metric.valueType) {
         case 'boolean':
-          value = channel.value === 'true';
+          value = metric.value === 'true';
           break;
         case 'integer':
-          value = parseInt(channel.value, 10);
+          value = parseInt(metric.value, 10);
           break;
         default:
-          value = channel.value;
+          value = metric.value;
       }
-      this.plcStatus.status[channel.name] = value;
+      this.plcStatus.status[metric.name] = value;
     }
     return EMPTY;
   }

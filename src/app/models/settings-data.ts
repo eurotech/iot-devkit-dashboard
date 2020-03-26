@@ -6,6 +6,6 @@ export interface SettingsData {
   refreshToken: string;
   clientId: string;
   deviceId: string;
-  assetName: string;
+  semanticTopic: string;
   refreshInterval: number;
 }

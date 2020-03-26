@@ -9,10 +9,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { PlcStatusService } from '../plc-status/plc-status.service';
 
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { EMPTY, Subscription, PartialObserver } from 'rxjs';
 import { MatButton } from '@angular/material/button';
-import {DeviceDataResult} from '../models/device-data-result';
+import { DeviceDataResult } from '../models/device-data-result';
 
 @Component({
   selector: 'app-toolbar',

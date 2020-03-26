@@ -19,7 +19,7 @@ export class SettingsDataService implements SettingsData {
   public refreshToken: string;
   public clientId: string;
   public deviceId: string;
-  public assetName: string;
+  public semanticTopic: string;
   public refreshInterval = 5;
 
   constructor() { }

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SettingsDataService } from '../settings-data/settings-data.service';
-import { Observable, interval, EMPTY, of, throwError } from 'rxjs';
+import { Observable, interval } from 'rxjs';
 import { DeviceListResult } from '../models/device-list-result';
 import { DeviceChannelsResult } from '../models/device-channels-result';
-import { switchMap, catchError, retryWhen, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { AccessToken } from '../models/access-token';
+import {DeviceDataResult} from '../models/device-data-result';
 
 @Injectable({
   providedIn: 'root'
@@ -47,10 +48,22 @@ export class EcHttpClientService {
         type: 'deviceAssets',
         deviceAsset: [
           {
-            name: this.settingsData.assetName
+            name: this.settingsData.semanticTopic
           }
         ]
       },
+      {
+        headers: {
+          Authorization: `Bearer ${this.settingsData.accessToken}`
+        }
+      });
+  }
+
+  public readAllData(): Observable<DeviceDataResult> {
+    return this.http.get<DeviceDataResult>(
+      `${this.settingsData.baseUri}/_/data/messages?clientId=${this.settingsData.clientId}` +
+                                                      `&channel=W1/A1/${this.settingsData.semanticTopic}` +
+                                                      `&limit=1`,
       {
         headers: {
           Authorization: `Bearer ${this.settingsData.accessToken}`
@@ -63,7 +76,7 @@ export class EcHttpClientService {
       type: 'deviceAssets',
       deviceAsset: [
         {
-          name: this.settingsData.assetName,
+          name: this.settingsData.semanticTopic,
           channels: [
             {
               valueType: typeof (value),
@@ -84,7 +97,7 @@ export class EcHttpClientService {
   public startPolling(): Observable<any> {
     return interval(this.settingsData.refreshInterval * 1000)
       .pipe(
-        switchMap(() => this.readAllChannels())
+        switchMap(() => this.readAllData())
       );
   }
 }

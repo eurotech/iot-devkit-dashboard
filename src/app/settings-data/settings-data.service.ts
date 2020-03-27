@@ -19,7 +19,18 @@ export class SettingsDataService implements SettingsData {
   public refreshToken: string;
   public clientId: string;
   public deviceId: string;
-  public semanticTopic: string;
+
+  private _assetName;
+  get assetName() { return this._assetName; }
+
+  private _semanticTopic = 'W1/A1/ModbusAsset';
+  get semanticTopic() { return this._semanticTopic; }
+  set semanticTopic(newSemanticTopic: string) {
+    this._semanticTopic = newSemanticTopic;
+    const channelParts = newSemanticTopic.split('/');
+    this._assetName = channelParts[channelParts.length - 1];
+  }
+
   public refreshInterval = 5;
 
   constructor() { }

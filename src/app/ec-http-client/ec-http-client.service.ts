@@ -62,7 +62,7 @@ export class EcHttpClientService {
   public readAllData(): Observable<DeviceDataResult> {
     return this.http.get<DeviceDataResult>(
       `${this.settingsData.baseUri}/_/data/messages?clientId=${this.settingsData.clientId}` +
-                                                      `&channel=W1/A1/${this.settingsData.semanticTopic}` +
+                                                      `&channel=${this.settingsData.semanticTopic}` +
                                                       `&limit=1`,
       {
         headers: {
@@ -76,7 +76,7 @@ export class EcHttpClientService {
       type: 'deviceAssets',
       deviceAsset: [
         {
-          name: this.settingsData.semanticTopic,
+          name: this.settingsData.assetName,
           channels: [
             {
               valueType: typeof (value),
